@@ -1,11 +1,22 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+// Try local vendor first (dev mode)
+$local = __DIR__ . '/../vendor/autoload.php';
+$global = __DIR__ . '/../../../autoload.php';
+
+if (file_exists($local)) {
+    require $local;
+} elseif (file_exists($global)) {
+    require $global;
+} else {
+    fwrite(STDERR, "Could not find Composer autoload.\\n\"");
+    exit(1);
+}
 
 use App\Commands\InstallCommand;
 use Symfony\Component\Console\Application;
 
-$app = new Application('devx', '0.0.5');
+$app = new Application('devx', '0.0.6');
 $app->add(new InstallCommand());
 $app->run();
