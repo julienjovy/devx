@@ -63,7 +63,7 @@ class InstallCommand extends Command
         $output->writeln("<comment>→ $label...</comment>");
         $process = new Process($command, $workingDir);
         $process->setTimeout(null);
-        $process->run(function ($type, $buffer) use ($output) {
+        $process->run(function ($_, $buffer) use ($output) {
             $output->write($buffer);
         });
     }
