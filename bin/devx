@@ -6,6 +6,6 @@ require __DIR__ . '/../vendor/autoload.php';
 use App\Commands\InstallCommand;
 use Symfony\Component\Console\Application;
 
-$app = new Application('devx', '0.0.1');
+$app = new Application('devx');
 $app->add(new InstallCommand());
 $app->run();
