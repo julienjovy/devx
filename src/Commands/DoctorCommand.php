@@ -6,6 +6,7 @@ use App\Doctor\CheckMode;
 use App\Doctor\FrameworkDetector;
 use App\Doctor\PackageAdvisor;
 use App\Doctor\ProjectScanner;
+use App\Utils\Logo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,27 +58,8 @@ class DoctorCommand extends Command
         $this->input = $input;
         $this->output = $output;
         $io = new SymfonyStyle($this->input, $this->output);
-        /*
 
-
-
-
-
-
-
-
-
-
-
-        */
-        $io->writeln("\033[38;5;213m██████╗ ███████╗██╗   ██╗██╗  ██╗\033[0m");
-        $io->writeln("\033[38;5;213m██╔══██╗██╔════╝██║   ██║╚██╗██╔╝\033[0m");
-        $io->writeln("\033[38;5;207m██║  ██║█████╗  ██║   ██║ ╚███╔╝\033[0m");
-        $io->writeln("\033[38;5;201m██║  ██║██╔══╝  ╚██╗ ██╔╝ ██╔██╗\033[0m");
-        $io->writeln("\033[38;5;198m██████╔╝███████╗ ╚████╔╝ ██╔╝ ██╗\033[0m");
-        $io->writeln("\033[38;5;129m██████╔╝███████╗ ╚████╔╝ ██╔╝ ██╗\033[0m");
-        $io->writeln("\033[38;5;93m╚═════╝ ╚══════╝  ╚═══╝  ╚═╝  ╚═╝\033[0m");
-
+        Logo::render($io, "DOCTOR");
 
         $composer = ProjectScanner::fileExists('composer.json') ? json_decode(file_get_contents('composer.json'), true) : [];
         $require = $composer['require'] ?? [];
