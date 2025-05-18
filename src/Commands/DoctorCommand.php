@@ -57,7 +57,27 @@ class DoctorCommand extends Command
         $this->input = $input;
         $this->output = $output;
         $io = new SymfonyStyle($this->input, $this->output);
-        $io->title('🔍 devx doctor: checking your environment...');
+        /*
+
+
+
+
+
+
+
+
+
+
+
+        */
+        $io->writeln("\033[38;5;213m██████╗ ███████╗██╗   ██╗██╗  ██╗\033[0m");
+        $io->writeln("\033[38;5;213m██╔══██╗██╔════╝██║   ██║╚██╗██╔╝\033[0m");
+        $io->writeln("\033[38;5;207m██║  ██║█████╗  ██║   ██║ ╚███╔╝\033[0m");
+        $io->writeln("\033[38;5;201m██║  ██║██╔══╝  ╚██╗ ██╔╝ ██╔██╗\033[0m");
+        $io->writeln("\033[38;5;198m██████╔╝███████╗ ╚████╔╝ ██╔╝ ██╗\033[0m");
+        $io->writeln("\033[38;5;129m██████╔╝███████╗ ╚████╔╝ ██╔╝ ██╗\033[0m");
+        $io->writeln("\033[38;5;93m╚═════╝ ╚══════╝  ╚═══╝  ╚═╝  ╚═╝\033[0m");
+
 
         $composer = ProjectScanner::fileExists('composer.json') ? json_decode(file_get_contents('composer.json'), true) : [];
         $require = $composer['require'] ?? [];
@@ -120,7 +140,7 @@ class DoctorCommand extends Command
                     foreach ($packages as $pkg => $desc) {
                         $rows[] = [$pkg, $desc];
                     }
-                    $io->table([strtoupper($category).' Package', 'Description'], $rows);
+                    $io->table([strtoupper($category) . ' Package', 'Description'], $rows);
                 }
                 $flat = [];
                 foreach ($suggestions as $group => $items) {
@@ -139,7 +159,7 @@ class DoctorCommand extends Command
                 $question->setMultiselect(true);
 
                 $selected = $helper->ask($this->input, $this->output, $question);
-                $toInstall = array_keys(array_filter($flat, fn ($desc) => in_array($desc, $selected)));
+                $toInstall = array_keys(array_filter($flat, fn($desc) => in_array($desc, $selected)));
 
                 if (! empty($toInstall)) {
                     $pkgList = implode(' ', $toInstall);
@@ -180,7 +200,7 @@ class DoctorCommand extends Command
         $process = Process::fromShellCommandline($command);
         $process->run();
 
-        $output = $process->getOutput().$process->getErrorOutput();
+        $output = $process->getOutput() . $process->getErrorOutput();
         $lines = preg_split("/(\r\n|\n|\r)/", $output);
         $firstLine = '';
         foreach ($lines as $line) {
