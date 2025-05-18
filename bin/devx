@@ -22,6 +22,6 @@ if (file_exists($local)) {
 
 
 
-$app = new Application('devx', '0.1.0');
+$app = new Application('devx', '0.1.2');
 $app->addCommands([new InstallCommand, new FreshCommand, new DoctorCommand]);
 $app->run();
