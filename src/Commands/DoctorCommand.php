@@ -93,7 +93,7 @@ class DoctorCommand extends Command
     {
         $io->section('📁 Project structure');
 
-        //@TODO: Output all the ok in one block
+        // @TODO: Output all the ok in one block
         $this->checkFileExists($io, '.env', '✅ .env file found', '⚠ .env missing');
 
         if ($framework === 'laravel') {
@@ -108,9 +108,9 @@ class DoctorCommand extends Command
 
         if ($framework && $io->confirm("Do you want suggestions for useful $framework packages?", true)) {
             $suggestions = PackageAdvisor::getSuggestions($framework, $require, $requireDev);
-            echo "<pre>";
+            echo '<pre>';
             print_r($suggestions);
-            die();
+            exit();
 
             if (empty($suggestions)) {
                 $io->success("No missing popular packages detected for $framework.");
@@ -120,7 +120,7 @@ class DoctorCommand extends Command
                     foreach ($packages as $pkg => $desc) {
                         $rows[] = [$pkg, $desc];
                     }
-                    $io->table([strtoupper($category) . ' Package', 'Description'], $rows);
+                    $io->table([strtoupper($category).' Package', 'Description'], $rows);
                 }
                 $flat = [];
                 foreach ($suggestions as $group => $items) {
@@ -139,7 +139,7 @@ class DoctorCommand extends Command
                 $question->setMultiselect(true);
 
                 $selected = $helper->ask($this->input, $this->output, $question);
-                $toInstall = array_keys(array_filter($flat, fn($desc) => in_array($desc, $selected)));
+                $toInstall = array_keys(array_filter($flat, fn ($desc) => in_array($desc, $selected)));
 
                 if (! empty($toInstall)) {
                     $pkgList = implode(' ', $toInstall);
@@ -159,17 +159,17 @@ class DoctorCommand extends Command
             }
         }
     }
+
     /**
      * Check if a tool is installed and available in the system
      *
      * Executes a shell command to verify if a tool exists and is properly configured.
      * Displays success, warning or error message based on the command execution result.
      *
-     * @param SymfonyStyle $io The SymfonyStyle instance to handle command output
-     * @param string $name The name of the tool being checked
-     * @param string $command The shell command to verify tool existence/version
-     * @param bool $required Whether the tool is required (error) or optional (warning)
-     * @return void
+     * @param  SymfonyStyle  $io  The SymfonyStyle instance to handle command output
+     * @param  string  $name  The name of the tool being checked
+     * @param  string  $command  The shell command to verify tool existence/version
+     * @param  bool  $required  Whether the tool is required (error) or optional (warning)
      *
      * @throws \Symfony\Component\Process\Exception\RuntimeException When proc_open is not installed
      * @throws \Symfony\Component\Process\Exception\LogicException When process is already running
@@ -180,7 +180,7 @@ class DoctorCommand extends Command
         $process = Process::fromShellCommandline($command);
         $process->run();
 
-        $output = $process->getOutput() . $process->getErrorOutput();
+        $output = $process->getOutput().$process->getErrorOutput();
         $lines = preg_split("/(\r\n|\n|\r)/", $output);
         $firstLine = '';
         foreach ($lines as $line) {
