@@ -90,4 +90,4 @@ Checks:
 
 Made with ❤️ && ☕ by [Julien Jovy](https://github.com/julienjovy)
 
-Pull requests welcome. Pull requests welcome. Pull requests welcome. Pull requests welcome. Pull requests welcome. Pull requests welcome. Pull requests welcome. Pull requests welcome. Pull requests welcome. 
+Pull requests welcome.
