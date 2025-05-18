@@ -1,11 +1,30 @@
 <?php
 
 use App\PackageManager\PackageManagerInterface;
+use App\Utils\Shell;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class Winget implements PackageManagerInterface
 {
-    public function ensureInstalled(string $package) {}
-    public function isAvailable() {}
-    public function isPackageInstalled() {}
-    public function install() {}
+    public static function isAvailable(): bool
+    {
+        return Shell::runVersionCommand('winget -v') !== null;
+    }
+
+    public static function isPackageInstalled(string $package): bool
+    {
+        return false;
+    }
+
+    public static function install(string $package): bool
+    {
+        Shell::runCommand('winget install $package');
+
+        return true;
+    }
+
+    public static function ensureInstalled(string $package, SymfonyStyle $io): void
+    {
+        // Implementation here
+    }
 }

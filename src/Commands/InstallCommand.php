@@ -32,7 +32,7 @@ class InstallCommand extends Command
     {
         $stack = $input->getOption('stack');
         $project = $input->getOption('project');
-        $path = rtrim($input->getOption('path'), '/') . '/' . $project;
+        $path = rtrim($input->getOption('path'), '/').'/'.$project;
         $mode = $input->getOption('mode');
 
         if ($stack !== 'laravel-nuxt') {
@@ -42,7 +42,7 @@ class InstallCommand extends Command
         }
 
         if (! in_array($mode, ['split', 'fullstack'])) {
-            $output->writeln('<error>Invalid mode: ' . $mode . '. Use "split" or "fullstack".</error>');
+            $output->writeln('<error>Invalid mode: '.$mode.'. Use "split" or "fullstack".</error>');
 
             return Command::FAILURE;
         }

@@ -21,6 +21,7 @@ class Chocolatey implements PackageManagerInterface
     public static function isPackageInstalled(string $package): bool
     {
         $output = Shell::runVersionCommand("choco list --local-only --exact $package");
+
         return $output !== null && str_contains(strtolower($output), strtolower($package));
     }
 
@@ -31,6 +32,7 @@ class Chocolatey implements PackageManagerInterface
     {
         $command = "choco install $package -y";
         $output = Shell::runVersionCommand($command);
+
         return $output !== null;
     }
 
@@ -39,13 +41,15 @@ class Chocolatey implements PackageManagerInterface
      */
     public static function ensureInstalled(string $package, SymfonyStyle $io): void
     {
-        if (!self::isAvailable()) {
-            $io->error("Chocolatey is not installed on this system.");
+        if (! self::isAvailable()) {
+            $io->error('Chocolatey is not installed on this system.');
+
             return;
         }
 
         if (self::isPackageInstalled($package)) {
             $io->success("✔ $package is already installed.");
+
             return;
         }
 
