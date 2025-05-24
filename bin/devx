@@ -1,9 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-use App\Commands\InstallCommand;
-use App\Commands\FreshCommand;
-use App\Commands\DoctorCommand;
 use Symfony\Component\Console\Application;
 
 // Try local vendor first (dev mode)
@@ -22,6 +19,22 @@ if (file_exists($local)) {
 
 
 
-$app = new Application('devx', '0.1.2');
-$app->addCommands([new InstallCommand, new FreshCommand, new DoctorCommand]);
+$app = new Application('devx', '0.1.0');
+
+$app->addCommands([
+    new \App\Commands\DoctorCommand,
+    new \App\Commands\FreshCommand,
+    new \App\Commands\InstallCommand,
+]);
+
+// Auto-load all install:<tool> commands
+$installCommandDir = __DIR__ . '/../src/Commands/Install/';
+foreach (glob($installCommandDir . '*InstallCommand.php') as $file) {
+    require_once $file;
+    $className = 'App\\Commands\\Install\\' . basename($file, '.php');
+    if (class_exists($className)) {
+        $app->add(new $className());
+    }
+}
+
 $app->run();
