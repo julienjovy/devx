@@ -2,41 +2,60 @@
 
 namespace App\Commands;
 
+use App\Utils\Logo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
-
     protected function configure(): void
     {
         $this
             ->setName('install')
             ->setDescription('Install a full Laravel + Nuxt development environment.')
-            ->addOption('stack', null, InputOption::VALUE_REQUIRED, 'The tech stack to install (e.g., laravel-nuxt)', 'laravel-nuxt')
-            ->addOption('project', null, InputOption::VALUE_REQUIRED, 'Project name', 'my-app')
-            ->addOption('path', null, InputOption::VALUE_OPTIONAL, 'Installation path', getcwd());
+            ->addOption('stack', 's', InputOption::VALUE_REQUIRED, 'The tech stack to install (e.g., laravel-nuxt)', 'laravel-nuxt')
+            ->addOption('project', 'p', InputOption::VALUE_REQUIRED, 'Project name', 'my-app')
+            ->addOption('path', null, InputOption::VALUE_OPTIONAL, 'Installation path', getcwd())
+            ->addOption(
+                'mode',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Installation mode: "fullstack" or "split"',
+                'split'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $stack = $input->getOption('stack');
         $project = $input->getOption('project');
-        $path = rtrim($input->getOption('path'), '/') . '/' . $project;
+        $path = rtrim($input->getOption('path'), '/').'/'.$project;
+        $mode = $input->getOption('mode');
+
+        $io = new SymfonyStyle($input, $output);
+        Logo::render($io, 'INSTALL');
 
         if ($stack !== 'laravel-nuxt') {
-            $output->writeln("<error>Unsupported stack: $stack</error>");
+            $io->writeln("<error>Unsupported stack: $stack</error>");
+
+            return Command::FAILURE;
+        }
+
+        if (! in_array($mode, ['split', 'fullstack'])) {
+            $output->writeln('<error>Invalid mode: '.$mode.'. Use "split" or "fullstack".</error>');
+
             return Command::FAILURE;
         }
 
         $output->writeln("<info>🚀 Installing Laravel + Nuxt stack in:</info> $path\n");
 
-        $fs = new Filesystem();
-        if (!$fs->exists($path)) {
+        $fs = new Filesystem;
+        if (! $fs->exists($path)) {
             $fs->mkdir($path);
         }
 
@@ -55,6 +74,7 @@ class InstallCommand extends Command
         $this->runProcess(['npm', 'install'], $output, 'Installing Nuxt dependencies', $nuxtPath);
 
         $output->writeln("\n<info>✅ Laravel + Nuxt stack installed successfully!</info>");
+
         return Command::SUCCESS;
     }
 

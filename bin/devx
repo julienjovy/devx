@@ -1,8 +1,11 @@
 #!/usr/bin/env php
 <?php
 
+use Symfony\Component\Console\Application;
+
 // Try local vendor first (dev mode)
 $local = __DIR__ . '/../vendor/autoload.php';
+
 $global = __DIR__ . '/../../../autoload.php';
 
 if (file_exists($local)) {
@@ -14,9 +17,24 @@ if (file_exists($local)) {
     exit(1);
 }
 
-use App\Commands\InstallCommand;
-use Symfony\Component\Console\Application;
 
-$app = new Application('devx', '0.0.6');
-$app->add(new InstallCommand());
+
+$app = new Application('devx', '0.1.3');
+
+$app->addCommands([
+    new \App\Commands\DoctorCommand,
+    new \App\Commands\FreshCommand,
+    new \App\Commands\InstallCommand,
+]);
+
+// Auto-load all install:<tool> commands
+$installCommandDir = __DIR__ . '/../src/Commands/Install/';
+foreach (glob($installCommandDir . '*InstallCommand.php') as $file) {
+    require_once $file;
+    $className = 'App\\Commands\\Install\\' . basename($file, '.php');
+    if (class_exists($className)) {
+        $app->add(new $className());
+    }
+}
+
 $app->run();
