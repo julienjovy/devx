@@ -25,6 +25,8 @@ class Winget implements PackageManagerInterface
 
     public static function ensureInstalled(string $package, SymfonyStyle $io): void
     {
-        // Implementation here
+        if ((! self::isAvailable())) {
+            $io->error('winget is not installed on this system');
+        }
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Commands\Install;
 
 use App\Commands\Setup\QuestionHelper;
-use App\Utils\Shell;
 use App\Utils\StringUtils;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Command\Command;
@@ -44,7 +43,7 @@ class LaragonInstallCommand extends Command
             $output->writeln("✔️ Dernière version de Laragon : <info>{$version}</info>");
             $choices = [];
             foreach ($assets as $index => $asset) {
-                $choices[count($choices) +1] = sprintf(
+                $choices[count($choices) + 1] = sprintf(
                     '%s %10s',
                     StringUtils::padRight($asset['name'], 50),
                     StringUtils::humanReadableSize($asset['size'])
