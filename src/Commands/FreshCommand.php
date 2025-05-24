@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Utils\Logo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -10,6 +11,12 @@ use Symfony\Component\Process\Process;
 
 class FreshCommand extends Command
 {
+    public function __construct()
+    {
+        parent::__construct('fresh');
+        $this->response = [];
+    }
+
     protected function configure()
     {
         $this->setName('fresh');
@@ -18,6 +25,8 @@ class FreshCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+
+        Logo::render($io, 'FRESH');
 
         $checks = [
             'node' => 'node -v',
@@ -65,7 +74,8 @@ class FreshCommand extends Command
                     }
                 }
             } else {
-                $io->success("$tool found: ");
+                //                $io->success("$tool found: ");
+                $output->writeln("<fg=green>✔</> <info>$tool found</info>");
             }
         }
 

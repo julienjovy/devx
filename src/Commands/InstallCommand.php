@@ -2,10 +2,12 @@
 
 namespace App\Commands;
 
+use App\Utils\Logo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
@@ -35,8 +37,11 @@ class InstallCommand extends Command
         $path = rtrim($input->getOption('path'), '/').'/'.$project;
         $mode = $input->getOption('mode');
 
+        $io = new SymfonyStyle($input, $output);
+        Logo::render($io, 'INSTALL');
+
         if ($stack !== 'laravel-nuxt') {
-            $output->writeln("<error>Unsupported stack: $stack</error>");
+            $io->writeln("<error>Unsupported stack: $stack</error>");
 
             return Command::FAILURE;
         }
