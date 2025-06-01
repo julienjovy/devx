@@ -1,7 +1,7 @@
 {
   "name": "julienjovy/devx",
   "description": "Universal CLI tool to automate dev setup and maintenance (Laravel, Nuxt, Composer, ...)",
-  "type": "project",
+  "type": "library",
   "license": "MIT",
   "autoload": {
     "psr-4": {
