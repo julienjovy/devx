@@ -19,10 +19,12 @@ interface PackageManagerInterface
     /**
      * Install a package using the package manager.
      */
-    public static function install(string $package): bool;
+    public static function install(string $package): void;
 
     /**
      * Ensure a package is installed; may provide console feedback.
      */
     public static function ensureInstalled(string $package, SymfonyStyle $io): void;
+
+    public function installByToolName(string $toolName): bool;
 }
