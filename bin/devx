@@ -19,7 +19,7 @@ if (file_exists($local)) {
 
 
 
-$app = new Application('devx', '0.1.4');
+$app = new Application('devx', '0.1.6');
 
 $app->addCommands([
     new \App\Commands\DoctorCommand,
