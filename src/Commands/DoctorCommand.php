@@ -110,10 +110,6 @@ class DoctorCommand extends Command
 
         if ($framework && $io->confirm("Do you want suggestions for useful $framework packages?", true)) {
             $suggestions = PackageAdvisor::getSuggestions($framework, $require, $requireDev);
-            echo '<pre>';
-            print_r($suggestions);
-            exit();
-
             if (empty($suggestions)) {
                 $io->success("No missing popular packages detected for $framework.");
             } else {
