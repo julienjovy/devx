@@ -1,7 +1,7 @@
 # devx
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/julienjovy/devx.svg?style=flat-square)](https://packagist.org/packages/julienjovy/devx)
-[![PHP Version](https://img.shields.io/badge/php-%5E8.1-blue?logo=php&style=flat-square)](https://www.php.net/)
+[![PHP Version](https://img.shields.io/badge/php-%5E8.3-blue?logo=php&style=flat-square)](https://www.php.net/)
 [![License](https://img.shields.io/github/license/julienjovy/devx?style=flat-square)](LICENSE)
 
 **The Laravel-friendly CLI to automate development environments.**

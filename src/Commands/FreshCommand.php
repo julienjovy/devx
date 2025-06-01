@@ -2,6 +2,8 @@
 
 namespace App\Commands;
 
+use App\PackageManager\Manager as PackageManager;
+use App\PackageManager\PackageManagerInterface;
 use App\Utils\Logo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -11,10 +13,13 @@ use Symfony\Component\Process\Process;
 
 class FreshCommand extends Command
 {
+    private PackageManagerInterface $packageManager;
+
     public function __construct()
     {
         parent::__construct('fresh');
-        $this->response = [];
+        //        $this->response = [];
+        $this->packageManager = new (PackageManager::resolve())();
     }
 
     protected function configure()
@@ -28,54 +33,52 @@ class FreshCommand extends Command
 
         Logo::render($io, 'FRESH');
 
+        $found = [];
+        $missing = [];
+
         $checks = [
             'node' => 'node -v',
             'npm' => 'npm -v',
             'nvm' => 'nvm --version',
+            'github-cli' => 'insomnia --version',
+            'wsl' => 'wsl --version',
         ];
+
+        $io->writeln('<info>Checking for basic dev tools</info>');
 
         foreach ($checks as $tool => $command) {
             $process = Process::fromShellCommandline($command);
             $process->run();
 
-            if (! $process->isSuccessful()) {
-                $io->warning("$tool is not installed or not in PATH.");
-
-                if ($tool === 'nvm') {
-                    $installCmd = match (PHP_OS_FAMILY) {
-                        'Windows' => 'winget install CoreyButler.NVMforWindows',
-                        'Darwin', 'Linux' => 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash',
-                        default => null,
-                    };
-                }
-
-                if ($tool === 'node') {
-                    $installCmd = match (PHP_OS_FAMILY) {
-                        'Windows' => 'winget install OpenJS.NodeJS',
-                        'Darwin' => 'brew install node',
-                        'Linux' => 'sudo apt install nodejs -y',
-                        default => null,
-                    };
-                }
-
-                if (isset($installCmd)) {
-                    if ($io->confirm("Do you want to install $tool now?")) {
-                        $install = Process::fromShellCommandline($installCmd);
-                        $install->setTty(Process::isTtySupported());
-                        $install->run(function ($_, $buffer) use ($io) {
-                            $io->write($buffer);
-                        });
-
-                        if ($install->isSuccessful()) {
-                            $io->success("$tool was installed successfully.");
-                        } else {
-                            $io->error("Failed to install $tool. You might need to do it manually.");
-                        }
-                    }
-                }
+            if ($process->isSuccessful()) {
+                $found[] = $tool;
             } else {
-                //                $io->success("$tool found: ");
-                $output->writeln("<fg=green>✔</> <info>$tool found</info>");
+                $missing[] = $tool;
+            }
+        }
+
+        $io->newLine(2);
+
+        if (! empty($found)) {
+            $io->section('✔ Tools found');
+            foreach ($found as $tool) {
+                $io->writeln("<fg=green>✔</> <info>$tool</info>");
+            }
+        }
+        $io->newLine(2);
+
+        if (! empty($missing)) {
+            $io->section('⚠ Tools missing');
+            foreach ($missing as $tool) {
+                $io->writeln("<fg=yellow>x</> <comment>$tool</comment>");
+            }
+            foreach ($missing as $tool) {
+                if ($io->confirm("do you wish to install <comment>$tool</comment>?")) {
+                    $this->packageManager->install($tool);
+                } else {
+                    $io->newLine();
+                    $io->writeln("$tool won't be installed you can run <comment>devx install:" . strtolower($tool) . "</comment>");
+                }
             }
         }
 

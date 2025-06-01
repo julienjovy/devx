@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum WingetPackage: string
+enum WingetPackage: string implements PackageInterface
 {
     case Git = 'Git.Git';
     case NodeJS = 'OpenJS.NodeJS.LTS';
@@ -56,12 +56,12 @@ enum WingetPackage: string
         };
     }
 
-    public static function get(string $packageName): ?WingetPackage
+    public static function get(string $packageName): ?self
     {
         return self::tryFromName($packageName);
     }
 
-    private static function tryFromName(string $name): ?WingetPackage
+    public static function tryFromName(string $name): ?self
     {
         foreach (self::cases() as $case) {
             print_r($case);
@@ -71,5 +71,25 @@ enum WingetPackage: string
         }
 
         return null;
+    }
+
+    public static function findByToolName(string $toolName): ?self
+    {
+        return match ($toolName) {
+            'git' => self::Git,
+            'node' => self::NodeJS,
+            'vscode' => self::VSCode,
+            'windows-terminal' => self::WindowsTerminal,
+            '7zip' => self::Zip7,
+            'postman' => self::Postman,
+            'oh-my-posh' => self::OhMyPosh,
+            'firacode' => self::FiraCode,
+            'python' => self::Python,
+            'github-cli' => self::GitHubCLI,
+            'docker' => self::Docker,
+            'insomnia' => self::Insomnia,
+            'neovim' => self::Neovim,
+            default => null,
+        };
     }
 }
