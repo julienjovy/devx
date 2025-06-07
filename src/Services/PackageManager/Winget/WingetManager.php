@@ -1,18 +1,19 @@
 <?php
 
-namespace App\PackageManager;
+namespace App\Services\PackageManager\Winget;
 
 use App\Enums\WingetPackage;
+use App\Services\AbstractPackageManager;
+use App\Traits\managePackage;
 use App\Utils\Shell;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 
-class WingetManager implements PackageManagerInterface
+class WingetManager extends AbstractPackageManager
 {
-    public static function isAvailable(): bool
-    {
-        return Shell::runVersionCommand('winget -v') !== null;
-    }
+    use managePackage;
+
+    public static string $managerName = 'winget';
 
     public static function isPackageInstalled(string $packageName): bool
     {
@@ -23,18 +24,18 @@ class WingetManager implements PackageManagerInterface
         return $process->isSuccessful() && str_contains($process->getOutput(), $package);
     }
 
-    public static function install(string $package): void
+    public static function install(string $packageName): bool
     {
-        $wingetPackage = WingetPackage::get($package);
+        $wingetPackage = WingetPackage::get($packageName);
         if (! $wingetPackage) {
 
         }
-        if (self::isPackageInstalled($package)) {
-            exit("package $package is already installed");
+        if (self::isPackageInstalled($packageName)) {
+            exit("package $packageName is already installed");
         } else {
-            exit('package '.$package.' is not installed');
+            exit('package '.$packageName.' is not installed');
         }
-        Shell::runInstallCommand("winget install --id {$wingetPackage->value} -e");
+        return Shell::runInstallCommand(static::$managerName . "install --id {$wingetPackage->value} -e");
     }
 
     public static function ensureInstalled(string $package, SymfonyStyle $io): void
@@ -53,6 +54,6 @@ class WingetManager implements PackageManagerInterface
             return false;
         }
 
-        $this->install($package->value);
+        return $this->install($package->value);
     }
 }

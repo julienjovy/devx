@@ -4,8 +4,7 @@ namespace App\Enums;
 
 interface PackageInterface
 {
-
-    static function findByToolName(string $toolName): ?PackageInterface;
+    public static function findByToolName(string $toolName): ?PackageInterface;
 
     public function label(): string;
 
@@ -13,6 +12,5 @@ interface PackageInterface
 
     public static function get(string $packageName): ?PackageInterface;
 
-    static function tryFromName(string $name): ?PackageInterface;
-
+    public static function tryFromName(string $name): ?PackageInterface;
 }

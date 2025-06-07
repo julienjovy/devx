@@ -2,8 +2,8 @@
 
 namespace App\Commands;
 
-use App\PackageManager\Manager as PackageManager;
-use App\PackageManager\PackageManagerInterface;
+use App\Services\PackageManager\Manager as PackageManager;
+use App\Services\PackageManager\PackageManagerInterface;
 use App\Utils\Logo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,11 +18,10 @@ class FreshCommand extends Command
     public function __construct()
     {
         parent::__construct('fresh');
-        //        $this->response = [];
         $this->packageManager = new (PackageManager::resolve())();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('fresh');
     }
@@ -33,10 +32,13 @@ class FreshCommand extends Command
 
         Logo::render($io, 'FRESH');
 
+        $this->packageManager::confirmUsage($io);
+
         $found = [];
         $missing = [];
 
         $checks = [
+            'chocolatey' => 'choco -v',
             'node' => 'node -v',
             'npm' => 'npm -v',
             'nvm' => 'nvm --version',
@@ -77,7 +79,7 @@ class FreshCommand extends Command
                     $this->packageManager->install($tool);
                 } else {
                     $io->newLine();
-                    $io->writeln("$tool won't be installed you can run <comment>devx install:" . strtolower($tool) . "</comment>");
+                    $io->writeln("$tool won't be installed you can run <comment>devx install:".strtolower($tool).'</comment>');
                 }
             }
         }
