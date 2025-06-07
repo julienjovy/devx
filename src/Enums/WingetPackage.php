@@ -40,21 +40,22 @@ enum WingetPackage: string implements PackageInterface
     public function description(): string
     {
         return match ($this) {
-            self::Git => 'Contrôle de version distribué',
-            self::NodeJS => 'Runtime JavaScript + npm/yarn',
-            self::VSCode => 'Éditeur de code moderne',
-            self::WindowsTerminal => 'Terminal multi-shell moderne',
-            self::Zip7 => 'Outil de compression/décompression',
-            self::Postman => 'Testeur d’API REST',
-            self::OhMyPosh => 'Custom prompt pour PowerShell/Terminal',
-            self::FiraCode => 'Police avec ligatures & icônes pour devs',
-            self::Python => 'Langage de script et d’automatisation',
-            self::GitHubCLI => 'Interface GitHub en ligne de commande',
-            self::Docker => 'Conteneurisation pour dev local',
-            self::Insomnia => 'Alternative à Postman, légère et rapide',
-            self::Neovim => 'Éditeur terminal ultra rapide pour puristes',
+            self::Git => 'Distributed version control system',
+            self::NodeJS => 'JavaScript runtime environment (includes npm/yarn)',
+            self::VSCode => 'Modern code editor',
+            self::WindowsTerminal => 'Modern multi-shell terminal',
+            self::Zip7 => 'Compression and extraction tool',
+            self::Postman => 'REST API testing tool',
+            self::OhMyPosh => 'Custom prompt theme engine for PowerShell/Terminal',
+            self::FiraCode => 'Font with ligatures & icons for developers',
+            self::Python => 'Scripting and automation language',
+            self::GitHubCLI => 'Command-line interface for GitHub',
+            self::Docker => 'Containerization platform for local development',
+            self::Insomnia => 'Lightweight alternative to Postman for API testing',
+            self::Neovim => 'Terminal-based text editor for power users',
         };
     }
+
 
     public static function get(string $packageName): ?self
     {
@@ -64,7 +65,6 @@ enum WingetPackage: string implements PackageInterface
     public static function tryFromName(string $name): ?self
     {
         foreach (self::cases() as $case) {
-            print_r($case);
             if ($case->name === $name) {
                 return $case;
             }
@@ -89,7 +89,6 @@ enum WingetPackage: string implements PackageInterface
             'docker' => self::Docker,
             'insomnia' => self::Insomnia,
             'neovim' => self::Neovim,
-            default => null,
         };
     }
 }
