@@ -53,7 +53,7 @@ enum ChocolateyPackage: string implements PackageInterface
         // TODO: Implement get() method.
     }
 
-    static function tryFromName(string $name): ?PackageInterface
+    public static function tryFromName(string $name): ?PackageInterface
     {
         // TODO: Implement tryFromName() method.
     }

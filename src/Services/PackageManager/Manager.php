@@ -1,6 +1,9 @@
 <?php
 
-namespace App\PackageManager;
+namespace App\Services\PackageManager;
+
+use App\Services\PackageManager\Chocolatey\ChocolateyManager;
+use App\Services\PackageManager\Winget\WingetManager;
 
 class Manager
 {
@@ -23,8 +26,6 @@ class Manager
         if (PHP_OS_FAMILY === 'Linux') {
 
         }
-
-        // MacOS / Linux à venir
         throw new \RuntimeException('No supported package manager found.');
     }
 }
