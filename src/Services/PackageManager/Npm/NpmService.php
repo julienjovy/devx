@@ -1,31 +1,31 @@
 <?php
 
-namespace App\Services\PackageManager\Chocolatey;
+namespace App\Services\PackageManager\Npm;
 
-use App\Enums\ChocolateyPackage;
-use App\Services\AbstractPackageManager;
+use App\Enums\NpmPackage;
+use App\Services\PackageManager\PackageManagerService;
 use App\Traits\managePackage;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 
-class ChocolateyManager extends AbstractPackageManager
+class NpmService extends PackageManagerService
 {
     use managePackage;
 
-    public static string $managerName = 'chocolatey';
+    public static string $managerName = 'npm';
 
     public static function install(string $packageName): bool
     {
-        $process = Process::fromShellCommandline("choco install {$packageName} -y");
+        $process = Process::fromShellCommandline("npm install {$packageName}");
 
         return $process->run() !== 0;
     }
 
     public function installByToolName(string $toolName): bool
     {
-        $pkg = ChocolateyPackage::findByToolName($toolName);
+        $pkg = NpmPackage::findByToolName($toolName);
 
-        return $pkg ? $this->install($pkg->value) : false;
+        return $pkg && $this->install($pkg->value);
     }
 
     public static function isPackageInstalled(string $package): bool
