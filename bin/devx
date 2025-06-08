@@ -8,7 +8,6 @@ $local = __DIR__ . '/../vendor/autoload.php';
 
 $global = __DIR__ . '/../../../autoload.php';
 
-
 if (file_exists($local)) {
     require $local;
 } elseif (file_exists($global)) {
@@ -20,11 +19,7 @@ if (file_exists($local)) {
 
 
 
-
-
-
-
-$app = new Application('devx', '0.2.1');
+$app = new Application('devx', '0.2.2');
 
 $app->addCommands([
     new \App\Commands\DoctorCommand,
