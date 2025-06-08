@@ -1,0 +1,27 @@
+name: Sync refacto with main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-refacto:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Fetch and rebase refacto on main
+        run: |
+          git checkout refacto
+          git rebase origin/main
+          git push origin refacto --force-with-lease
