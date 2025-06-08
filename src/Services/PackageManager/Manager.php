@@ -2,20 +2,20 @@
 
 namespace App\Services\PackageManager;
 
-use App\Services\PackageManager\Chocolatey\ChocolateyManager;
-use App\Services\PackageManager\Winget\WingetManager;
+use App\Services\PackageManager\Chocolatey\ChocolateyService;
+use App\Services\PackageManager\Winget\WingetService;
 
 class Manager
 {
     public static function resolve(): string
     {
         if (PHP_OS_FAMILY === 'Windows') {
-            if (ChocolateyManager::isAvailable()) {
-                return ChocolateyManager::class;
+            if (ChocolateyService::isAvailable()) {
+                return ChocolateyService::class;
             }
 
-            if (WingetManager::isAvailable()) {
-                return WingetManager::class;
+            if (WingetService::isAvailable()) {
+                return WingetService::class;
             }
         }
 

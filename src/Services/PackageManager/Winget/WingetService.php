@@ -3,13 +3,13 @@
 namespace App\Services\PackageManager\Winget;
 
 use App\Enums\WingetPackage;
-use App\Services\AbstractPackageManager;
+use App\Services\PackageManager\PackageManagerService;
 use App\Traits\managePackage;
 use App\Utils\Shell;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 
-class WingetManager extends AbstractPackageManager
+class WingetService extends PackageManagerService
 {
     use managePackage;
 
@@ -35,7 +35,8 @@ class WingetManager extends AbstractPackageManager
         } else {
             exit('package '.$packageName.' is not installed');
         }
-        return Shell::runInstallCommand(static::$managerName . "install --id {$wingetPackage->value} -e");
+
+        return Shell::runInstallCommand(static::$managerName."install --id {$wingetPackage->value} -e");
     }
 
     public static function ensureInstalled(string $package, SymfonyStyle $io): void

@@ -56,7 +56,6 @@ enum WingetPackage: string implements PackageInterface
         };
     }
 
-
     public static function get(string $packageName): ?self
     {
         return self::tryFromName($packageName);
