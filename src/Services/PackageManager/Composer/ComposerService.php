@@ -44,6 +44,24 @@ class ComposerService extends PackageManagerService
         return $pkg && $this->install($pkg->value);
     }
 
+    public static function getLatestVersion(): string
+    {
+        $json = @file_get_contents('https://getcomposer.org/versions');
+        if (! $json) {
+            return 'unknown';
+        }
+
+        $data = json_decode($json, true);
+        if (
+            isset($data['stable'][0]['version']) &&
+            is_string($data['stable'][0]['version'])
+        ) {
+            return $data['stable'][0]['version'];
+        }
+
+        return 'unknown';
+    }
+
     public static function isPackageInstalled(string $package): bool
     {
         return Process::fromShellCommandline("choco list {$package}")->run() !== 0;

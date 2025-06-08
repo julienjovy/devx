@@ -37,4 +37,11 @@ class NpmService extends PackageManagerService
     {
         // TODO: Implement ensureInstalled() method.
     }
+
+    public static function getLatestVersion(): string
+    {
+        exec('npm view npm version', $output);
+
+        return trim($output[0] ?? '');
+    }
 }

@@ -33,4 +33,25 @@ class HomebrewService extends PackageManagerService
     {
         // TODO: Implement installByToolName() method.
     }
+
+    public static function getLatestVersion(): string
+    {
+        $output = @file_get_contents('https://api.github.com/repos/Homebrew/brew/tags', false, stream_context_create([
+            'http' => [
+                'user_agent' => 'devx-package-checker',
+            ],
+        ]));
+
+        if (! $output) {
+            return 'unknown';
+        }
+
+        $tags = json_decode($output, true);
+
+        if (isset($tags[0]['name'])) {
+            return ltrim($tags[0]['name'], 'v');
+        }
+
+        return 'unknown';
+    }
 }

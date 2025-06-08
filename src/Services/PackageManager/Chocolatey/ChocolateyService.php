@@ -36,4 +36,19 @@ class ChocolateyService extends PackageManagerService
     {
         // TODO: Implement ensureInstalled() method.
     }
+
+    public static function getLatestVersion(): string
+    {
+        exec('choco outdated --limit-output', $output, $code);
+
+        foreach ($output as $line) {
+            if (str_starts_with($line, 'chocolatey|')) {
+                $parts = explode('|', $line);
+
+                return $parts[2] ?? 'unknown';
+            }
+        }
+
+        return '';
+    }
 }

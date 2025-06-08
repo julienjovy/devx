@@ -42,6 +42,8 @@ abstract class PackageManagerService implements PackageManagerInterface
 
     abstract public function installByToolName(string $toolName): bool;
 
+    abstract public static function getLatestVersion(): string;
+
     public static function managerName(): string
     {
         return static::$managerName;
@@ -83,23 +85,28 @@ abstract class PackageManagerService implements PackageManagerInterface
 
         foreach ($managers as $managerClass) {
             if ($managerClass::isAvailable()) {
+                $currentVersion = $managerClass::getManagerVersion();
+                $newestVersion = $managerClass::getLatestVersion();
                 $installed[] = [
                     'name' => $managerClass::managerName(),
-                    'text' => '<info>'.$managerClass::getManagerVersion().'</info>',
+                    'version' => '<info>'.$managerClass::getManagerVersion().'</info>',
+                    'new_version' => $newestVersion,
                 ];
             } else {
                 $notInstalled[] = [
                     'name' => $managerClass::managerName(),
-                    'text' => '<comment>not present</comment>',
+                    'version' => '<comment>not present</comment>',
+                    'new_version' => $managerClass::getLatestVersion(),
                 ];
             }
             $progress->advance();
         }
 
         $progress->finish();
-        $io->newLine(2);
+        $progress->clear();
+        $io->section('Package managers detected');
         $table = new Table($io);
-        $table->setHeaders(['Name', 'Version']);
+        $table->setHeaders(['Name', 'Version', 'New version']);
         $table->addRows([...$installed, ...$notInstalled]);
         $table->setColumnWidths(['30', '15']);
         $table->render();
