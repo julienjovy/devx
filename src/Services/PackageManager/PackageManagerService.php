@@ -69,10 +69,10 @@ abstract class PackageManagerService implements PackageManagerInterface
         $managers = [
             ChocolateyService::class,
             WingetService::class,
-            NpmService::class,
-            ComposerService::class,
-            LaravelService::class,
-            HomebrewService::class,
+//            NpmService::class,
+//            ComposerService::class,
+//            LaravelService::class,
+//            HomebrewService::class,
         ];
 
         $installed = [];
@@ -85,10 +85,9 @@ abstract class PackageManagerService implements PackageManagerInterface
 
         foreach ($managers as $managerClass) {
             if ($managerClass::isAvailable()) {
-                $currentVersion = $managerClass::getManagerVersion();
                 $newestVersion = $managerClass::getLatestVersion();
                 $installed[] = [
-                    'name' => $managerClass::managerName(),
+                    'name' => $managerClass::$managerName,
                     'version' => '<info>'.$managerClass::getManagerVersion().'</info>',
                     'new_version' => $newestVersion,
                 ];
@@ -110,6 +109,26 @@ abstract class PackageManagerService implements PackageManagerInterface
         $table->addRows([...$installed, ...$notInstalled]);
         $table->setColumnWidths(['30', '15']);
         $table->render();
+
+        $wanted = [ChocolateyService::$managerName, WingetService::$managerName];
+
+        $matches = array_filter($installed, function ($item) use ($wanted) {
+            return in_array($item['name'], $wanted, true);
+        });
+
+        if (count($matches) > 1) {
+            $choices = array_column($matches, 'name');
+            $default = $choices[0] ?? null;
+            $selected = $io->choice(
+                'Which package manager would you like to use?',
+                $choices,
+                $default
+            );
+        }
+
+        var_dump($matches);
+
+        exit();
 
     }
 }
