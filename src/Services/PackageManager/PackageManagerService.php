@@ -42,6 +42,8 @@ abstract class PackageManagerService implements PackageManagerInterface
 
     abstract public function installByToolName(string $toolName): bool;
 
+    abstract public static function getLatestVersion(): string;
+
     public static function managerName(): string
     {
         return static::$managerName;
@@ -83,26 +85,48 @@ abstract class PackageManagerService implements PackageManagerInterface
 
         foreach ($managers as $managerClass) {
             if ($managerClass::isAvailable()) {
+                $newestVersion = $managerClass::getLatestVersion() !== '' ? $managerClass::getLatestVersion() : "<comment>unknown</comment>";
                 $installed[] = [
-                    'name' => $managerClass::managerName(),
-                    'text' => '<info>'.$managerClass::getManagerVersion().'</info>',
+                    'name' => $managerClass::$managerName,
+                    'version' => '<info>'.$managerClass::getManagerVersion().'</info>',
+                    'new_version' => $newestVersion,
                 ];
             } else {
                 $notInstalled[] = [
                     'name' => $managerClass::managerName(),
-                    'text' => '<comment>not present</comment>',
+                    'version' => '<comment>not present</comment>',
+                    'new_version' => $managerClass::getLatestVersion(),
                 ];
             }
             $progress->advance();
         }
 
         $progress->finish();
-        $io->newLine(2);
+        $progress->clear();
+        $io->section('Package managers detected');
         $table = new Table($io);
-        $table->setHeaders(['Name', 'Version']);
+        $table->setHeaders(['Name', 'Version', 'Newest version']);
         $table->addRows([...$installed, ...$notInstalled]);
         $table->setColumnWidths(['30', '15']);
         $table->render();
+
+        $wanted = [ChocolateyService::$managerName, WingetService::$managerName];
+
+        $matches = array_filter($installed, function ($item) use ($wanted) {
+            return in_array($item['name'], $wanted, true);
+        });
+
+        if (count($matches) > 1) {
+
+            $choices = array_column($matches, 'name');
+            $question ="<comment>" . count($choices) . " package managers detected [" . implode(' / ', $choices). "]</comment> \nWhich one would you like to use ?";
+            $default = $choices[0] ?? null;
+            $selected = $io->choice(
+                $question,
+                $choices,
+                $default
+            );
+        }
 
     }
 }

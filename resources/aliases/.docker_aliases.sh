@@ -1,32 +1,31 @@
-# Gestion des containers
+# Container management
 alias dps='docker ps'
 alias dpsa='docker ps -a'
 alias dim='docker images'
-alias drm='docker rm'       # supprimer un ou plusieurs containers
-alias drmi='docker rmi'     # supprimer une ou plusieurs images
+alias drm='docker rm'
+alias drmi='docker rmi'
 
-# Démarrer / arrêter / redémarrer
+# Start / stop / restart
 alias dstart='docker start'
 alias dstop='docker stop'
 alias drestart='docker restart'
 
-# Logs et shell dans un container
+# Logs and shell in a container
 alias dlogs='docker logs -f'
-alias dexec='docker exec -it'  # ex: dexec <container> /bin/bash
+alias dexec='docker exec -it'
 
-# Construire et lancer
+# Build and run
 alias dbuild='docker build -t'
 alias dup='docker-compose up -d'
 alias ddown='docker-compose down'
 
-# Statistiques et info
+# Stats and info
 alias dstats='docker stats'
 alias dinspect='docker inspect'
 
-# Nettoyer
+# Cleanup
 alias dclean='docker system prune -f'
 alias dcleanvolumes='docker volume prune -f'
 
-# Docker compose (si installé)
+# Docker Compose (if installed)
 alias dcs='docker-compose'
-

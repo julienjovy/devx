@@ -33,4 +33,12 @@ class LaravelService extends PackageManagerService
     {
         // TODO: Implement installByToolName() method.
     }
+
+    public static function getLatestVersion(): string
+    {
+        exec('composer show laravel/installer --all --format=json', $output);
+        $data = json_decode(implode("\n", $output), true);
+
+        return $data['versions'][0] ?? '';
+    }
 }

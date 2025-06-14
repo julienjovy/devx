@@ -57,4 +57,19 @@ class WingetService extends PackageManagerService
 
         return $this->install($package->value);
     }
+
+    public static function getLatestVersion(): string
+    {
+        $json = @file_get_contents('https://api.github.com/repos/microsoft/winget-cli/releases/latest', false, stream_context_create([
+            'http' => ['header' => "User-Agent: devx\r\n"],
+        ]));
+
+        if (! $json) {
+            return 'unknown';
+        }
+
+        $data = json_decode($json, true);
+
+        return $data['tag_name'] ?? 'unknown';
+    }
 }

@@ -2,10 +2,11 @@
 
 namespace App\Services\AliasMaker\Docker;
 
+use App\Services\AliasMaker\AliasMakerInterface;
 use App\Traits\usePathTool;
 use App\Utils\Path;
 
-class Docker
+class Docker implements AliasMakerInterface
 {
     use usePathTool;
 

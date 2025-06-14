@@ -2,10 +2,11 @@
 
 namespace App\Services\AliasMaker\Kubectl;
 
+use App\Services\AliasMaker\AliasMakerInterface;
 use App\Traits\usePathTool;
 use App\Utils\Path;
 
-class Kubectl
+class Kubectl implements AliasMakerInterface
 {
     use usePathTool;
 

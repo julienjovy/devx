@@ -31,4 +31,6 @@ interface PackageManagerInterface
     public static function ensureInstalled(string $package, SymfonyStyle $io): void;
 
     public function installByToolName(string $toolName): bool;
+
+    public static function getLatestVersion(): string;
 }
