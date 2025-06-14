@@ -85,7 +85,7 @@ abstract class PackageManagerService implements PackageManagerInterface
 
         foreach ($managers as $managerClass) {
             if ($managerClass::isAvailable()) {
-                $newestVersion = $managerClass::getLatestVersion() !== '' ? $managerClass::getLatestVersion() : "<comment>unknown</comment>";
+                $newestVersion = $managerClass::getLatestVersion() !== '' ? $managerClass::getLatestVersion() : '<comment>unknown</comment>';
                 $installed[] = [
                     'name' => $managerClass::$managerName,
                     'version' => '<info>'.$managerClass::getManagerVersion().'</info>',
@@ -119,7 +119,7 @@ abstract class PackageManagerService implements PackageManagerInterface
         if (count($matches) > 1) {
 
             $choices = array_column($matches, 'name');
-            $question ="<comment>" . count($choices) . " package managers detected [" . implode(' / ', $choices). "]</comment> \nWhich one would you like to use ?";
+            $question = '<comment>'.count($choices).' package managers detected ['.implode(' / ', $choices)."]</comment> \nWhich one would you like to use ?";
             $default = $choices[0] ?? null;
             $selected = $io->choice(
                 $question,
