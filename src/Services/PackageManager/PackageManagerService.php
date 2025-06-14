@@ -3,10 +3,10 @@
 namespace App\Services\PackageManager;
 
 use App\Services\PackageManager\Chocolatey\ChocolateyService;
-use App\Services\PackageManager\Composer\ComposerService;
 use App\Services\PackageManager\Homebrew\HomebrewService;
-use App\Services\PackageManager\Laravel\LaravelService;
-use App\Services\PackageManager\Npm\NpmService;
+use App\Services\PackageManager\Javascript\NpmService;
+use App\Services\PackageManager\PHP\ComposerService;
+use App\Services\PackageManager\PHP\LaravelService;
 use App\Services\PackageManager\Winget\WingetService;
 use App\Traits\managePackage;
 use Symfony\Component\Console\Helper\Table;

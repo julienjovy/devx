@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\PackageManager\Composer;
+namespace App\Services\PackageManager\PHP;
 
 use App\Enums\ChocolateyPackage;
 use App\Services\PackageManager\PackageManagerService;

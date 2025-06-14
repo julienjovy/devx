@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\PackageManager\Laravel;
+namespace App\Services\PackageManager\PHP;
 
 use App\Services\PackageManager\PackageManagerService;
 use App\Traits\managePackage;
