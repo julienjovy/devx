@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
-class LaragonInstallCommand extends Command
+class LaragonCommand extends Command
 {
     protected function configure()
     {
