@@ -11,12 +11,12 @@ From initializing fullstack apps (Laravel + Nuxt) to updating dependencies, devx
 
 ## 🚀 What is devx?
 
-`devx` is a command-line tool that helps developers quickly set up, maintain, and scale local development environments for Laravel-based stacks.
+`devx` is a command-line tool that helps developers quickly set up, maintain, and scale local development environments.
 
-It supports:
+It (or will) supports:
 
-- Laravel backend scaffolding
-- Nuxt frontend pairing
+- PHP framework scaffolding
+- JS / TS frontend pairing
 - Composer and Node/NPM automation
 - Custom aliases, `.bashrc` generation, OTP/OAuth setup
 - And more to come...
@@ -64,6 +64,14 @@ Options:
 - `--mode=split|fullstack`
   `split` = frontend & backend in separate folders
   `fullstack` = front (e.g. Vite/Blade) inside Laravel app
+
+### 🏗️ Generate aliases for you favorite tools
+
+```
+devx alias
+devx alias:kube (can be shortened to alias:k)
+devx alias:docker (can be shortened to alias:d)
+```
 
 ---
 

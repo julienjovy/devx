@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\PackageManager\Npm;
+namespace App\Services\PackageManager\Javascript;
 
 use App\Enums\NpmPackage;
 use App\Services\PackageManager\PackageManagerService;
