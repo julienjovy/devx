@@ -2,6 +2,7 @@
 <?php
 
 use Symfony\Component\Console\Application;
+use Symfony\Component\Finder\Finder;
 
 // Try local vendor first (dev mode)
 $local = __DIR__ . '/../vendor/autoload.php';
@@ -20,22 +21,32 @@ if (file_exists($local)) {
 
 
 
-$app = new Application('devx', '0.2.2');
 
-$app->addCommands([
-    new \App\Commands\DoctorCommand,
-    new \App\Commands\FreshCommand,
-    new \App\Commands\InstallCommand,
-]);
 
-// Auto-load all install:<tool> commands
-$installCommandDir = __DIR__ . '/../src/Commands/Install/';
-foreach (glob($installCommandDir . '*InstallCommand.php') as $file) {
-    require_once $file;
-    $className = 'App\\Commands\\Install\\' . basename($file, '.php');
-    if (class_exists($className)) {
-        $app->add(new $className());
-    }
+$app = new Application('devx', '0.2.3');
+
+
+$path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Commands';
+
+if (!$path) {
+    throw new \RuntimeException('Command folder not found.');
+}
+$finder = new Finder();
+$finder->in($path)
+    ->depth('>= 0')
+    ->files()
+    ->name('*.php')
+    ->sortByName();
+
+foreach ($finder as $file) {
+    $namespace = 'App\\Commands';
+    $class = $namespace . '\\' . ($file->getRelativePath() ? $file->getRelativePath() . "\\" : '' )  . $file->getBasename('.php');
+
+    $app->add(new $class());
 }
 
-$app->run();
+try {
+    $app->run();
+} catch (Exception $e) {
+    print $e->getMessage();
+}
