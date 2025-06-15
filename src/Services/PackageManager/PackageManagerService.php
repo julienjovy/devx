@@ -82,7 +82,6 @@ abstract class PackageManagerService implements PackageManagerInterface
 
         $progress = $io->createProgressBar(count($managers));
         $progress->start();
-
         foreach ($managers as $managerClass) {
             if ($managerClass::isAvailable()) {
                 $newestVersion = $managerClass::getLatestVersion() !== '' ? $managerClass::getLatestVersion() : "<comment>unknown</comment>";

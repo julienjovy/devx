@@ -8,6 +8,8 @@ use App\Utils\Path;
 
 class Docker implements AliasMakerInterface
 {
+
+    public static string $name = "docker";
     use usePathTool;
 
     public static function generateAliasFile(): void

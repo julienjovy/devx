@@ -8,6 +8,8 @@ use App\Utils\Path;
 
 class Kubectl implements AliasMakerInterface
 {
+
+    public static string $name = "kubectl";
     use usePathTool;
 
     public static function generateAliasFile(): void
